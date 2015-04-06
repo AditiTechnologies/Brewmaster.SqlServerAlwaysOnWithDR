@@ -240,7 +240,7 @@
     },
 	{
       "ParameterName": "AdminPassword",
-      "TemplateName": "sqlag_infra",
+      "TemplateName": "sqlag_drinfra",
       "TemplateParameterName": "DomainJoinUserPassword"
     },	
 	{

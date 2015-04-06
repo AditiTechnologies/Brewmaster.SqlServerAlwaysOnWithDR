@@ -1,0 +1,319 @@
+{
+  "Name": "SQLServerAlwaysOnWithDR",
+  "Description": "Creates SQL Server 2014 AlwaysOn deployment with disaster recovery.",
+  "Version": "1.0.0",
+  "Parameters": [
+    {
+      "Name": "Region",
+      "Type": "String",
+      "TypeHint": "AzureRegionName",
+      "Description": "Name of Azure region."
+    },
+    {
+      "Name": "AffinityGroup",
+      "Type": "String",
+      "TypeHint": "AzureAffinityGroupName",
+      "Description": "Name of Azure affinity group."
+    },
+	{
+      "Name": "SecondaryDatacenterRegion",
+      "Type": "String",      
+      "Description": "Name of secondary datacenter Azure region."
+    },
+    {
+      "Name": "SecondaryDatacenterAffinityGroup",
+      "Type": "String",      
+      "Description": "Name of Azure affinity group for secondary datacenter."
+    },
+    {
+		"Name": "VnetName",
+		"Type": "String",
+		"Description": "Azure Virtual Network for setting up windows failover cluster."
+	},
+	{
+		"Name": "SecondaryDatacenterVnetName",
+		"Type": "String",
+		"Description": "Name of Azure Virtual Network in the secondary datacenter for disaster recovery."
+	},
+	{
+		"Name": "VnetGatewayConnectionKey",
+		"Type": "String",
+		"Description": "Key for configuring the gateway connection with disaster recovery Azure Virtual Network in secondary datacenter.",
+		"TypeHint": "password"
+	},
+	{
+		"Name": "DiskStore",
+		"Type": "String",
+		"TypeHint": "AzureStorageName",
+		"Description": "Name of Azure storage account for creating VM disks. Will be created only if it does not already exists. If it exists then it should lie in the specified affinity group."
+	},
+	{
+		"Name": "SecondaryDatacenterDiskStore",
+		"Type": "String",		
+		"Description": "Name of Azure storage account for creating secondary datacenter VM disks. Will be created only if it does not already exists. If it exists then it should lie in the specified secondary datacenter affinity group."
+	},
+	{
+		"Name": "ADCloudService",
+		"Type": "String",
+		"TypeHint": "AzureCloudServiceName",
+		"Description": "Name of the Azure Cloud Service to which Active Directory VMs are to be deployed. Will be created only if it does not already exists. If it exists then it should lie in the specified affinity group."
+	},        
+	{
+		"Name": "FQDN",
+		"Type": "String",
+		"TypeHint": "domain",
+		"Description": "Fully qualified domain name for setting up active directory in the specified Azure Virtual Network.",
+		"Minimum": 1,
+		"Maximum": 64
+	},
+	{
+      "Name": "Domain",
+      "Type": "String",
+      "TypeHint": "domain",
+      "Description": "NetBios domain name.",
+	  "Minimum": 1,
+      "Maximum": 64
+    },
+	{
+		"Name": "ADVMSize",
+		"Type": "String",
+		"TypeHint": "AzureRoleSize",
+		"Description": "Size of the Active Directory VMs.",
+		"Default": "Small"
+	},
+	{
+		"Name": "DRADCloudService",
+		"Type": "String",		
+		"Description": "Name of the secondary datacenter Azure Cloud Service to which domain controller VM will be deployed."
+	},
+	{
+		"Name": "DRADVMSize",
+		"Type": "String",
+		"TypeHint": "AzureRoleSize",
+		"Description": "Size of the secondary datacenter domain controller VM.",
+		"Default": "Small"
+	},
+	{
+		"Name": "SQLAGCloudService",
+		"Type": "String",
+		"TypeHint": "AzureCloudServiceName",
+		"Description": "Name of the Azure Cloud Service to which SQL VMs will be deployed."
+	},
+	{
+		"Name": "SQLVMSize",
+		"Type": "String",
+		"TypeHint": "AzureRoleSize",
+		"Description": "Size of the SQL VMs. The minimum recommended size is 'Large'.",
+		"Default": "Small"
+	},
+	{
+		"Name": "DRSQLAGCloudService",
+		"Type": "String",		
+		"Description": "Name of the Azure Cloud Service to which secondary datacenter SQL VMs will be deployed."
+	},        
+	{
+		"Name": "DRSQLVMSize",
+		"Type": "String",
+		"TypeHint": "AzureRoleSize",
+		"Description": "Size of the secondary datacenter SQL VMs. The minimum recommended size is 'Large'.",
+		"Default": "Large"
+	},
+	{
+		"Name": "AdminName",
+		"Type": "String",
+		"TypeHint": "username",
+		"Description": "Name of local administrator account.",
+		"Minimum": 1,
+		"Maximum": 64
+	},
+	{
+		"Name": "AdminPassword",
+		"Type": "String",
+		"TypeHint": "password",
+		"Description": "Password of local administrator account.",
+		"MaskValue": true,
+		"AllowedRegex": "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$",
+		"AllowedDescription": "Please provide a complex password comprised of minimum 8 characters with atleast 1 alphabet, 1 number and 1 special character."
+	},
+	{
+		"Name": "DSRMPassPhrase",
+		"Type": "String",
+		"TypeHint": "password",
+		"Description": "Safemode Password for domain",
+		"MaskValue": true,
+		"AllowedRegex": "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$",
+		"AllowedDescription": "Please provide a complex password comprised of minimum 8 characters with atleast 1 alphabet, 1 number and 1 special character."
+	},
+	{
+		"Name": "AvailabilityGroupName",
+		"Type": "String",
+		"Description": "Name of SQL Server Availability Group. This has to be unique in the domain(setup within the virtual network).",
+		"Minimum": 1,
+		"Maximum": 32
+	},
+	{
+		"Name": "DatabaseName",
+		"Type": "String",
+		"Description": "Name of the database which is to be added to the SQL Server Availability Group.",
+		"Minimum": 1,
+		"Maximum": 64
+	},
+	{
+		"Name": "NumberOfPrimaryDatacenterSQLNodes",
+		"Type": "Number",
+		"Description": "No of SQL VMs in primary datacenter. A minimum of two are required.",
+		"Default": 2,
+		"Minimum": 2,
+		"Maximum": 5
+	},
+	{
+		"Name": "SqlAdminPassword",
+		"Type": "String",
+		"TypeHint": "password",
+		"Description": "Password for SQL 'sa' account.",
+		"Minimum": 1,
+		"Maximum": 64
+	},
+	{
+		"Name": "SqlSvcAccountName",
+		"Type": "String",
+		"TypeHint": "username",
+		"Description": "Name of SQL service account.",
+		"Minimum": 1,
+		"Maximum": 64
+	},
+	{
+		"Name": "SqlSvcAccountPassword",
+		"Type": "String",
+		"TypeHint": "password",
+		"Description": "Password of SQL service account.",
+		"MaskValue": true,
+		"Minimum": 1,
+		"Maximum": 64
+	}	
+  ],
+  "ParameterMaps": [
+    {
+      "ParameterName": "ADCloudService",
+      "TemplateName": "ad",
+      "TemplateParameterName": "CloudService"
+    },
+    {
+      "ParameterName": "ADVMSize",
+      "TemplateName": "ad",
+      "TemplateParameterName": "VMSize"
+    },	
+	{
+      "ParameterName": "SecondaryDatacenterRegion",
+      "TemplateName": "sqlag-drinfra",
+      "TemplateParameterName": "Region"
+    },
+	{
+      "ParameterName": "SecondaryDatacenterAffinityGroup",
+      "TemplateName": "sqlag-drinfra",
+      "TemplateParameterName": "AffinityGroup"
+    },
+	{
+      "ParameterName": "SecondaryDatacenterDiskStore",
+      "TemplateName": "sqlag-drinfra",
+      "TemplateParameterName": "DiskStore"
+    },
+	{
+      "ParameterName": "SecondaryDatacenterVnetName",
+      "TemplateName": "sqlag-drinfra",
+      "TemplateParameterName": "VnetName"
+    },
+	{
+      "ParameterName": "VnetName",
+      "TemplateName": "sqlag-drinfra",
+      "TemplateParameterName": "PrimaryVnetName"
+    },
+	{
+      "ParameterName": "VnetGatewayConnectionKey",
+      "TemplateName": "sqlag-drinfra",
+      "TemplateParameterName": "PrimaryVnetGatewayConnectionKey"
+    },
+	{
+      "ParameterName": "AdminName",
+      "TemplateName": "sqlag-drinfra",
+      "TemplateParameterName": "DomainJoinUserName"
+    },
+	{
+      "ParameterName": "AdminPassword",
+      "TemplateName": "sqlag-infra",
+      "TemplateParameterName": "DomainJoinUserPassword"
+    },	
+	{
+      "ParameterName": "SQLAGCloudService",
+      "TemplateName": "sqlag-primary",
+      "TemplateParameterName": "CloudService"
+    },	
+	{
+      "ParameterName": "SQLVMSize",
+      "TemplateName": "sqlag-primary",
+      "TemplateParameterName": "VMSize"
+    },
+	{
+      "ParameterName": "AdminName",
+      "TemplateName": "sqlag-primary",
+      "TemplateParameterName": "DomainJoinUserName"
+    },
+	{
+      "ParameterName": "AdminPassword",
+      "TemplateName": "sqlag-primary",
+      "TemplateParameterName": "DomainJoinUserPassword"
+    },	
+	{
+      "ParameterName": "SecondaryDatacenterRegion",
+      "TemplateName": "sqlag-createag",
+      "TemplateParameterName": "Region"
+    },
+	{
+      "ParameterName": "SecondaryDatacenterAffinityGroup",
+      "TemplateName": "sqlag-createag",
+      "TemplateParameterName": "AffinityGroup"
+    },
+	{
+      "ParameterName": "SecondaryDatacenterDiskStore",
+      "TemplateName": "sqlag-createag",
+      "TemplateParameterName": "DiskStore"
+    },
+	{
+      "ParameterName": "SecondaryDatacenterVnetName",
+      "TemplateName": "sqlag-createag",
+      "TemplateParameterName": "VnetName"
+    },
+	{
+      "ParameterName": "AdminName",
+      "TemplateName": "sqlag-createag",
+      "TemplateParameterName": "DomainJoinUserName"
+    },
+	{
+      "ParameterName": "AdminPassword",
+      "TemplateName": "sqlag-createag",
+      "TemplateParameterName": "DomainJoinUserPassword"
+    },
+  ],
+  "Templates": [
+    {
+      "Name": "ad",
+      "TemplateId": "133b0572-3ae3-5a63-b484-0a6af9599fea",
+      "Commit": "for-ssao-with-dr"
+    },
+    {
+      "Name": "sqlag-drinfra",
+      "TemplateId": "1819a392-f0b7-593f-a79f-4015eb92bc26",
+      "Commit": "secondary-datacenter-infra"
+    },
+	{
+      "Name": "sqlag-primary",
+      "TemplateId": "1819a392-f0b7-593f-a79f-4015eb92bc26",
+      "Commit": "primary-datacenter-infra-and-failover-cluster"
+    },
+	{
+      "Name": "sqlag-createag",
+      "TemplateId": "1819a392-f0b7-593f-a79f-4015eb92bc26",
+      "Commit": "create-sql-availability-group"
+    }
+  ]
+}

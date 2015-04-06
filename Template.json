@@ -292,7 +292,7 @@
       "ParameterName": "AdminPassword",
       "TemplateName": "sqlag-createag",
       "TemplateParameterName": "DomainJoinUserPassword"
-    },
+    }
   ],
   "Templates": [
     {

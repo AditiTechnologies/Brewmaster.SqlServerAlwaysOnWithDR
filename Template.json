@@ -205,92 +205,92 @@
     },	
 	{
       "ParameterName": "SecondaryDatacenterRegion",
-      "TemplateName": "sqlag-drinfra",
+      "TemplateName": "sqlag_drinfra",
       "TemplateParameterName": "Region"
     },
 	{
       "ParameterName": "SecondaryDatacenterAffinityGroup",
-      "TemplateName": "sqlag-drinfra",
+      "TemplateName": "sqlag_drinfra",
       "TemplateParameterName": "AffinityGroup"
     },
 	{
       "ParameterName": "SecondaryDatacenterDiskStore",
-      "TemplateName": "sqlag-drinfra",
+      "TemplateName": "sqlag_drinfra",
       "TemplateParameterName": "DiskStore"
     },
 	{
       "ParameterName": "SecondaryDatacenterVnetName",
-      "TemplateName": "sqlag-drinfra",
+      "TemplateName": "sqlag_drinfra",
       "TemplateParameterName": "VnetName"
     },
 	{
       "ParameterName": "VnetName",
-      "TemplateName": "sqlag-drinfra",
+      "TemplateName": "sqlag_drinfra",
       "TemplateParameterName": "PrimaryVnetName"
     },
 	{
       "ParameterName": "VnetGatewayConnectionKey",
-      "TemplateName": "sqlag-drinfra",
+      "TemplateName": "sqlag_drinfra",
       "TemplateParameterName": "PrimaryVnetGatewayConnectionKey"
     },
 	{
       "ParameterName": "AdminName",
-      "TemplateName": "sqlag-drinfra",
+      "TemplateName": "sqlag_drinfra",
       "TemplateParameterName": "DomainJoinUserName"
     },
 	{
       "ParameterName": "AdminPassword",
-      "TemplateName": "sqlag-infra",
+      "TemplateName": "sqlag_infra",
       "TemplateParameterName": "DomainJoinUserPassword"
     },	
 	{
       "ParameterName": "SQLAGCloudService",
-      "TemplateName": "sqlag-primary",
+      "TemplateName": "sqlag_primary",
       "TemplateParameterName": "CloudService"
     },	
 	{
       "ParameterName": "SQLVMSize",
-      "TemplateName": "sqlag-primary",
+      "TemplateName": "sqlag_primary",
       "TemplateParameterName": "VMSize"
     },
 	{
       "ParameterName": "AdminName",
-      "TemplateName": "sqlag-primary",
+      "TemplateName": "sqlag_primary",
       "TemplateParameterName": "DomainJoinUserName"
     },
 	{
       "ParameterName": "AdminPassword",
-      "TemplateName": "sqlag-primary",
+      "TemplateName": "sqlag_primary",
       "TemplateParameterName": "DomainJoinUserPassword"
     },	
 	{
       "ParameterName": "SecondaryDatacenterRegion",
-      "TemplateName": "sqlag-createag",
+      "TemplateName": "sqlag_createag",
       "TemplateParameterName": "Region"
     },
 	{
       "ParameterName": "SecondaryDatacenterAffinityGroup",
-      "TemplateName": "sqlag-createag",
+      "TemplateName": "sqlag_createag",
       "TemplateParameterName": "AffinityGroup"
     },
 	{
       "ParameterName": "SecondaryDatacenterDiskStore",
-      "TemplateName": "sqlag-createag",
+      "TemplateName": "sqlag_createag",
       "TemplateParameterName": "DiskStore"
     },
 	{
       "ParameterName": "SecondaryDatacenterVnetName",
-      "TemplateName": "sqlag-createag",
+      "TemplateName": "sqlag_createag",
       "TemplateParameterName": "VnetName"
     },
 	{
       "ParameterName": "AdminName",
-      "TemplateName": "sqlag-createag",
+      "TemplateName": "sqlag_createag",
       "TemplateParameterName": "DomainJoinUserName"
     },
 	{
       "ParameterName": "AdminPassword",
-      "TemplateName": "sqlag-createag",
+      "TemplateName": "sqlag_createag",
       "TemplateParameterName": "DomainJoinUserPassword"
     }
   ],
@@ -301,17 +301,17 @@
       "Commit": "for-ssao-with-dr"
     },
     {
-      "Name": "sqlag-drinfra",
+      "Name": "sqlag_drinfra",
       "TemplateId": "1819a392-f0b7-593f-a79f-4015eb92bc26",
       "Commit": "secondary-datacenter-infra"
     },
 	{
-      "Name": "sqlag-primary",
+      "Name": "sqlag_primary",
       "TemplateId": "1819a392-f0b7-593f-a79f-4015eb92bc26",
       "Commit": "primary-datacenter-infra-and-failover-cluster"
     },
 	{
-      "Name": "sqlag-createag",
+      "Name": "sqlag_createag",
       "TemplateId": "1819a392-f0b7-593f-a79f-4015eb92bc26",
       "Commit": "create-sql-availability-group"
     }
